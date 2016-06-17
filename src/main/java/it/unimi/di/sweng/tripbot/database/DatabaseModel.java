@@ -31,13 +31,16 @@ public class DatabaseModel implements IModel {
 		String chat_id, poi, address;
 		chat_id = pointOfInterest.groupId;
 		poi = pointOfInterest.name;
-		address = pointOfInterest.position.toString();
+		address = pointOfInterest.position.toString().replaceAll("\'", " ");
+		//address = pointOfInterest.position.toString();
+		//System.err.println("address\t" + address);
 		Date meet_date = pointOfInterest.meetDate;
 		String dateString = dateFormat.format(meet_date);
 		try {
 			db.execQuery("INSERT INTO trips(chat_id, poi, address, meet_date) VALUES('" + chat_id + "','" + poi + "','"
 					+ address + "','" + dateString + "');");
 		} catch (SQLException e) {
+			System.err.println(e.getMessage());			
 			System.err.println("Errore query database");
 		}
 	}
