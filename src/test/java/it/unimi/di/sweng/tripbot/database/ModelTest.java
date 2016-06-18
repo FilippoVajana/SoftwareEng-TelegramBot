@@ -47,20 +47,20 @@ public class ModelTest {
 	public void insertPOITest() throws Exception {
 		db.execQuery("DELETE FROM trips WHERE chat_id='123';");
 		
-		String name = "Via università", groupId = "123";
+		String name = "via dell'Unione, Milano", groupId = "123";
 		Date meetDate = dateFormat.parse("2016-06-03 10:00:00");
-		APosition position = (new LocationProvider().getPositionByName("via dell'università, Parma"));
+		APosition position = (new LocationProvider().getPositionByName(name));
 		PointOfInterest p1 = new PointOfInterest(name, meetDate, position, groupId);
 		DatabaseModel model = new DatabaseModel();
 		model.insertNewPointOfInterest(p1);
 
 		ResultSet rs = db.execQuery("SELECT * FROM trips WHERE chat_id='123';");
 		if (rs.next()) {
-			assertEquals("Via università", rs.getString("poi"));
+			assertEquals(name, rs.getString("poi"));
 			assertEquals("2016-06-03 10:00:00", rs.getString("meet_date"));
 			//System.err.println("TEST\t" + rs.getString("address"));
 			//System.err.println(rs.getString("address"));
-			assertTrue(rs.getString("address").contains("dell Università"));
+			assertTrue(rs.getString("address").contains("Unione"));
 			//db.execQuery("DELETE FROM trips WHERE chat_id='123' AND poi='Duomo';");			
 			rs.close();
 		}
